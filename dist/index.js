@@ -5,10 +5,22 @@
  */
 
 /*eslint no-console: ["error", { allow: ["warn", "error", "log", "dir"] }] */
+/**
+ *Initialise the 'MongoClient', 'assert', and the 'url' with the
+ * object for the mongodb driver connetion, and assert library.
+ */
 
 var MongoClient = require("mongodb").MongoClient;
 var assert = require("assert");
 var url = "mongodb://localhost:27017/meanstack";
+
+/**
+ * build function that takes in the database connection db,
+ * and the call back function since the javascript will be
+ * running asynchronously.
+ * @param db
+ * @param callback
+ */
 
 var insertDocument = function insertDocument(db, callback) {
     db.collection("restaurants").insertOne({
@@ -39,17 +51,33 @@ var insertDocument = function insertDocument(db, callback) {
     });
 };
 
+/**
+ * build function that takes in the database connection db,
+ * and the call back function since the javascript will be
+ * running asynchronously.
+ * @param db
+ * @param callback
+ */
+
 var findRestaurants = function findRestaurants(db, callback) {
     db.collection("restaurants").find().toArray(function (err, doc) {
         assert.equal(err, null);
         if (doc != null) {
-            console.dir(doc);
+            console.dir(JSON.stringify(doc));
         } else {
             console.log("Calling the FIND call back ");
             callback();
         }
     });
 };
+
+/**
+ * build function that takes in the database connection db,
+ * and the call back function since the javascript will be
+ * running asynchronously.
+ * @param db
+ * @param callback
+ */
 
 var updateRestaurants = function updateRestaurants(db, callback) {
     db.collection("restaurants").updateOne({ "name": "Vella", "grades.grade": "B" }, {
@@ -62,6 +90,14 @@ var updateRestaurants = function updateRestaurants(db, callback) {
     });
 };
 
+/**
+ * build function that takes in the database connection db,
+ * and the call back function since the javascript will be
+ * running asynchronously.
+ * @param db
+ * @param callback
+ */
+
 var removeRestaurants = function removeRestaurants(db, callback) {
     db.collection("restaurants").deleteMany({ "borough": "Manhattan" }, function (err, results) {
         console.log(results);
@@ -69,10 +105,17 @@ var removeRestaurants = function removeRestaurants(db, callback) {
     });
 };
 
+/**
+ * Open a connection to the database and the function above
+ * with their callback functions that will close the database
+ * connection db each time.
+ */
 MongoClient.connect(url, function (err, db) {
     assert.equal(null, err);
+    if (db != null) console.log("DB to database open 1");
 
     insertDocument(db, function () {
+        console.log("TEST 1");
         db.close();
     });
 
