@@ -1,0 +1,31 @@
+{
+  "name": "mean-stack",
+  "version": "1.0.0",
+  "description": "• MEAN Stack is very simple compared to other frameworks, and very easy to get up and running. MEAN stack is easy to understand, data flow is clear, and it’s very fast. • MEAN is a free and open-source JavaScript software stack for building dynamic web sites and web applications. ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MrOnyancha/Mean-Stack.git"
+  },
+  "author": "Onyancha Chrispinus onyanchachrispinus@gmail.com",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/MrOnyancha/Mean-Stack/issues"
+  },
+  "homepage": "https://github.com/MrOnyancha/Mean-Stack#readme",
+  "dependencies": {
+    "babel-preset-es2015": "^6.18.0",
+    "mongodb": "^2.2.15",
+    "mongoose": "^4.7.2"
+  },
+  "devDependencies": {
+    "assert": "^1.4.1",
+    "mocha": "^3.2.0",
+    "babel-cli": "^6.18.0",
+    "eslint": "^3.12.0",
+    "eslint-config-google": "^0.7.1"
+  }
+}
