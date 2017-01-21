@@ -12,9 +12,9 @@ _ = require("underscore");
 
 module.exports = ()=> {
 
-	mongoose.connect("mongodb://localhost:27017/meanstack");
+	mongoose .connect("mongodb://localhost:27017/meanstack");
 
-	wagner.factory("db", ()=>{return mongoose;});
+	wagner.factory("db", ()=> { return mongoose ; });
 	Donor = mongoose.model("Donor", require("./donor"), "Donor");
 	BloodGroup = mongoose.model("BloodGroup", require("./bloodgroup"), "BloodGroup");
 

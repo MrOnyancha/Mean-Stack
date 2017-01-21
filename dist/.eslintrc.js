@@ -5,6 +5,7 @@ module.exports = {
         "browser": true,
         "commonjs": true,
         "node": true,
+        "mocha": true,
         "es6": true
     },
     "extends": "eslint:recommended",

@@ -2,25 +2,79 @@
 
 //noinspection Eslint
 /**
- * Created by chrisp on 21/01/2017.
+ * Created by chrisp on 24/08/2016.
  */
 
 var express = void 0,
-    app = void 0;
+    status = void 0,
+    bodyParser = void 0,
+    api = void 0,
+    compute = void 0,
+    handleMany = void 0;
 
 express = require("express");
+status = require("http-status");
+bodyParser = require("body-parser");
 
-module.exports = function () {
-	app = express();
+module.exports = function (wagner) {
+	api = express.Router();
 
-	app.get("/", function (req, res) {
-		res.send("Hello, World!");
-	});
+	api.use(bodyParser.json());
 
-	app.get("/user/:user", function (req, res) {
-		res.send("Page for User " + req.params.user + " with option " + req.query.options);
-	});
+	// api.put("/donor/add", wagner.invoke((Donor)=> {
+	// 	return (req, res)=> {
+	// 		try {
+	// 			var doner = req.body.donor;
+	// 		} catch (e) {
+	// 			return res.status(status.BAD_REQUEST).json({error: "No cart specified! "});
+	// 		}
+	//
+	// 		req.body.donor= doner;
+	// 		req.body.donor.save((error, user)=> {
+	// 			if (error) return res.status(status.INTERNAL_SERVER_ERROR).json({error: error.toString()});
+	// 			return res.json({user: user});
+	// 		});
+	// 	};
+	// }));
 
-	return app;
+
+	// Simple rest api to return the cordinates
+	api.get("/donor/search/:lat/:log/:limit/:range/:bloodgroup", wagner.invoke(function (Donor) {
+		return function (req, res) {
+			Donor.find({
+				$and: [{ $and: [{ "location.geoLong": { $gte: compute(req.params.log, -req.params.range) } }, { "location.geoLat": { $lte: compute(req.params.log, req.params.range) } }] }, { $and: [{ "location.geoLat": { $gte: compute(req.params.lat, -req.params.range) } }, { "location.geoLat": { $lte: compute(req.params.lat, req.params.range) } }] }, { "bloodGroup.canDonateTo": req.params.bloodgroup }]
+			}, { score: { $meta: "textScore" } }).sort({ score: { $meta: "textScore" } }).limit(parseFloat(req.params.limit)).exec(handleMany.bind(null, "donors", res));
+		};
+	}));
+
+	api.get("/bloodgroup/list", wagner.invoke(function (BloodGroup) {
+		return function (req, res) {
+			BloodGroup.find().sort({ _id: 1 }).exec(handleMany.bind(null, "bloodgroups", res));
+		};
+	}));
+
+	return api;
+};
+
+// var handleOne = (property, res, error, result)=> {
+//     console.log(result);
+//     console.log(property);
+//     if (error) return res.status(status.INTERNAL_SERVER_ERROR).json({error: error.toString()});
+//     if (!result) return res.status(status.NOT_FOUND).json({error: "Not found"});
+//     var json = {};
+//     json[property] = result;
+//     res.json(json);
+// };
+
+compute = function compute(a, b) {
+	return parseFloat(a) + parseFloat(b);
+};
+
+handleMany = function handleMany(property, res, error, result) {
+	if (error) return res.status(status.INTERNAL_SERVER_ERROR).json({ error: error.toString() });
+	if (!result) return res.status(status.NOT_FOUND).json({ error: "Not found" });
+	var json = {};
+	json[property] = result;
+	res.json(json);
 };
 //# sourceMappingURL=api.js.map

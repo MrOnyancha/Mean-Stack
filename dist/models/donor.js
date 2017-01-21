@@ -1,9 +1,13 @@
+"use strict";
+
 /**
  * Created by chrisp on 23/12/2016.
  */
 
-
-let mongoose, BloodGroup, donorSchema, schema;
+var mongoose = void 0,
+    BloodGroup = void 0,
+    donorSchema = void 0,
+    schema = void 0;
 
 mongoose = require("mongoose");
 BloodGroup = require("./bloodgroup");
@@ -22,8 +26,7 @@ donorSchema = {
 	phone: {
 		type: String,
 		required: true,
-		match: /^(([\+]?(256))|0)?7\(?([8|7|5|0|1|3|9])\)?[-. ]?([0-9]{4})[-. ]?([0-9]{3})$/
-		// match: "^(([\\+]?(256))|0)?7\\(?([8|7|5|0|1|3|9])\\)?[-. ]?([0-9]{4})[-. ]?([0-9]{3})$"
+		match: "^(([\\+]?(256))|0)?7\\(?([8|7|5|0|1|3|9])\\)?[-. ]?([0-9]{4})[-. ]?([0-9]{3})$"
 	},
 	// +256 78-5245-009
 	// 25678 5245 009
@@ -32,7 +35,7 @@ donorSchema = {
 	email: {
 		type: String,
 		required: true,
-		match: /.+@.+\..+/
+		match: "/.+@.+\..+/"
 	},
 	// onyanchachrispinus@gmail.com
 	// vvvv@jjjj.oo
@@ -54,18 +57,16 @@ donorSchema = {
 	}
 };
 
-
 schema = new mongoose.Schema(donorSchema);
 
+schema.index({ firstName: "text" });
+schema.index({ lastName: "text" });
+schema.index({ "location.geoLong": 1 });
+schema.index({ "location.geoLat": 1 });
 
-
-schema.index({firstName: "text"});
-schema.index({lastName: "text"});
-schema.index({"location.geoLong": 1});
-schema.index({"location.geoLat": 1});
-
-schema.set("toObject", {virtuals: true});
-schema.set("toJSON", {virtuals: true});
+schema.set("toObject", { virtuals: true });
+schema.set("toJSON", { virtuals: true });
 
 module.exports = schema;
 module.exports.donorSchema = donorSchema;
+//# sourceMappingURL=donor.js.map

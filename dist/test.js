@@ -11,7 +11,7 @@ var superAgent = void 0,
 
 assert = require("assert");
 superAgent = require("superagent");
-app = require("./routes/api");
+app = require("./routes/api_");
 
 //noinspection Eslint
 describe("server", function () {

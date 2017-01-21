@@ -1,7 +1,8 @@
 /**
  * Created by chrisp on 24/08/2016.
  */
-import {describe, it,before, after, beforeEach} from "mocha";
+
+ /*eslint no-console: ["error", { allow: ["warn", "error", "log", "dir"] }] */
 
 
 let superagent, assert, status, express, wagner, URL_ROOT, server, Donor, BloodGroup, models, app;
@@ -18,7 +19,7 @@ URL_ROOT = "http://localhost:3000";
 describe("Blood Group API ", ()=> {
 	before(()=> {
 		app = express();
-		require("./../public/javascripts/server/models")(wagner);
+		require("./../models/models")(wagner);
 
 		models = wagner.invoke((Donor, BloodGroup) => {
 			return {
@@ -127,7 +128,7 @@ describe("Blood Group API ", ()=> {
 			{
 				firstName: "Onyancha",
 				lastName: "Chrispinus",
-				phone: "+254703326159",
+				phone: "+256703326159",
 				email: "onyanchachrispinus@gmail.com",
 				location: {
 					geoLong: 50.00,
@@ -140,7 +141,7 @@ describe("Blood Group API ", ()=> {
 			}, {
 				firstName: "Patric",
 				lastName: "OPut",
-				phone: "+254767453422",
+				phone: "+256787453422",
 				email: "on@gmail.com",
 				location: {
 					geoLong: 35.00,
@@ -170,8 +171,10 @@ describe("Blood Group API ", ()=> {
 
 		BloodGroup.create(bloodgroup, (error, bloodgroups)=> {
 			assert.ifError(error);
+			console.log("The bloodgroups will be ", bloodgroups);
 			Donor.create(donors, (error, donors)=> {
 				assert.ifError(error);
+				console.log("The donors will be ", donors);
 				done();
 			});
 		});
@@ -181,7 +184,7 @@ describe("Blood Group API ", ()=> {
 
 	it("Load the first User in the database ", (done)=> {
 
-		var url = URL_ROOT + "/donor/search/50.9/50.9/10/10";
+		var url = URL_ROOT + "/donor/search/50.9/50.9/10/10/AB+";
 		superagent.get(url, (error, res)=> {
 			var results = "";
 			assert.ifError(error);
