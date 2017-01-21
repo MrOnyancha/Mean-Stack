@@ -16,6 +16,7 @@ bloodGroupSchema = {
 	_id: {
 		type: String,
 		required: true,
+
 		enum: bloodGroupList
 	},
 

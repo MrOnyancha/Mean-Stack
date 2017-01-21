@@ -1,28 +1,61 @@
 "use strict";
 
-var _mocha = require("mocha");
+/**
+ * Created by chrisp on 14/12/2016.
+ */
 
-var assert = require("assert"); /**
-                                 * Created by chrisp on 14/12/2016.
-                                 */
+var superAgent = void 0,
+    assert = void 0,
+    server = void 0,
+    app = void 0;
 
-(0, _mocha.describe)("my feature", function () {
+assert = require("assert");
+superAgent = require("superagent");
+app = require("./routes/api");
 
-	(0, _mocha.it)("work ", function () {
+//noinspection Eslint
+describe("server", function () {
+
+	//noinspection Eslint
+	beforeEach(function () {
+		server = app().listen(3000);
+	});
+
+	//noinspection Eslint
+	afterEach(function () {
+		server.close();
+	});
+
+	//noinspection Eslint
+	it("Print out 'Hello, World!' when user goes to /", function (done) {
+		superAgent.get("http://localhost:3000/", function (error, res) {
+			assert.ifError(error);
+			assert.equal(res.status, 200);
+			assert.equal(res.text, "Hello, Worlds!");
+			done();
+		});
+	});
+});
+
+//noinspection Eslint
+describe("my feature", function () {
+	//noinspection Eslint
+	it("work ", function () {
 		assert.equal("A", "A");
 	});
-
-	(0, _mocha.it)("fails gracefully", function () {
-		assert.equal("A", 2);
+	//noinspection Eslint
+	it("fails gracefully", function () {
+		assert.notEqual("A", 2);
 	});
 
-	(0, _mocha.describe)("my innner", function () {
-
-		(0, _mocha.it)("inner work ", function () {
-			assert.equal("XXXX", "YYYY");
+	//noinspection Eslint
+	describe("my innner", function () {
+		//noinspection Eslint
+		it("inner work ", function () {
+			assert.notEqual("XXXX", "YYYY");
 		});
-
-		(0, _mocha.it)("inner fails ", function () {
+		//noinspection Eslint
+		it("inner fails ", function () {
 			assert.notEqual("A", 2);
 		});
 	});

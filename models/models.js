@@ -11,7 +11,8 @@ mongoose = require("mongoose");
 _ = require("underscore");
 
 module.exports = ()=> {
-	mongoose.connect("mongodb://localhost:27017/blood");
+
+	mongoose.connect("mongodb://localhost:27017/meanstack");
 
 	wagner.factory("db", ()=>{return mongoose;});
 	Donor = mongoose.model("Donor", require("./donor"), "Donor");
