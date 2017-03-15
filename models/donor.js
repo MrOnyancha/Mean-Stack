@@ -21,8 +21,9 @@ donorSchema = {
 	},
 	phone: {
 		type: String,
-		required: true,
-		match: /^(([\+]?(256))|0)?7\(?([8|7|5|0|1|3|9])\)?[-. ]?([0-9]{4})[-. ]?([0-9]{3})$/
+		trim: true,
+		required: [true,"User phone number required"],
+		match: [ /^(([\+]?(256))|0)?7\(?([8|7|5|0|1|3|9])\)?[-. ]?([0-9]{4})[-. ]?([0-9]{3})$/,  "User the formart +xx xxx xxxx xxx "],
 		// match: "^(([\\+]?(256))|0)?7\\(?([8|7|5|0|1|3|9])\\)?[-. ]?([0-9]{4})[-. ]?([0-9]{3})$"
 	},
 	// +256 78-5245-009
@@ -31,23 +32,27 @@ donorSchema = {
 	// 78 5245 009
 	email: {
 		type: String,
-		required: true,
-		match: /.+@.+\..+/
+		trim: true,
+		unique: [ true, "Email already exists." ],
+		required: [ true,"Email address is required."],
+		match: [ /.+@.+\..+/, "User email format XXXX@YYY.PPP"]
+	},
+	password: {
+		type: String,
+		trim: true,
+		required: true
 	},
 	// onyanchachrispinus@gmail.com
 	// vvvv@jjjj.oo
-	location: {
-		geoLong: {
-			type: Number,
-			required: true
+	loc : {
+		type : {
+			type : String
 		},
-		geoLat: {
-			type: Number,
-			required: true
-		}
+		coordinates : { type: [ Number ] }
 	},
 	bloodGroup: BloodGroup.bloodGroupSchema,
 	data: {
+		// auto: {ty},
 		lastDonation: {
 			type: Number
 		}
@@ -61,8 +66,7 @@ schema = new mongoose.Schema(donorSchema);
 
 schema.index({firstName: "text"});
 schema.index({lastName: "text"});
-schema.index({"location.geoLong": 1});
-schema.index({"location.geoLat": 1});
+schema.index({"loc.coordinates": 1});
 
 schema.set("toObject", {virtuals: true});
 schema.set("toJSON", {virtuals: true});

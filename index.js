@@ -22,6 +22,9 @@ app = express();
 
 app.use(logger("dev"));
 
+
+wagner.invoke(require("./routes/auth"),{app:app});// FACEBOOK
+
 // wagner.invoke(require("./public/javascripts/server/auth"),{app:app});
 // app.use(express.static(path.join(__dirname, "public"),{ maxAge: 4 * 60 * 60 * 1000 /* 2hrs */ }));
 

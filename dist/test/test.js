@@ -16,7 +16,8 @@ var superagent = void 0,
     Donor = void 0,
     BloodGroup = void 0,
     models = void 0,
-    app = void 0;
+    app = void 0,
+    hashSalt = void 0;
 
 superagent = require("superagent");
 assert = require("assert");
@@ -25,6 +26,7 @@ express = require("express");
 wagner = require("wagner-core");
 
 URL_ROOT = "http://localhost:3000";
+hashSalt = "IHngate#bi*Tall";
 // var PRODUCT_ID = "000000000000000000000001";
 
 describe("Blood Group API ", function () {
@@ -127,12 +129,10 @@ describe("Blood Group API ", function () {
 		donors = [{
 			firstName: "Onyancha",
 			lastName: "Chrispinus",
-			phone: "+254703326159",
+			phone: "+256703326159",
 			email: "onyanchachrispinus@gmail.com",
-			location: {
-				geoLong: 50.00,
-				geoLat: 50.00
-			},
+			password: hashSalt + "Chris123",
+			loc: { coordinates: [32.582520, 0.347596] },
 			bloodGroup: bloodgroup[0],
 			data: {
 				lastDonation: 1546453
@@ -140,12 +140,10 @@ describe("Blood Group API ", function () {
 		}, {
 			firstName: "Patric",
 			lastName: "OPut",
-			phone: "+254767453422",
+			phone: "+256787453422",
 			email: "on@gmail.com",
-			location: {
-				geoLong: 35.00,
-				geoLat: 25.00
-			},
+			password: hashSalt + "Chris1234",
+			loc: { coordinates: [32.682520, 0.547596] },
 			bloodGroup: bloodgroup[4],
 			data: {
 				lastDonation: 1546453
@@ -155,10 +153,8 @@ describe("Blood Group API ", function () {
 			lastName: "denis",
 			phone: "+256709815909",
 			email: "ts@gmail.com",
-			location: {
-				geoLong: 45.00,
-				geoLat: 60.00
-			},
+			password: hashSalt + "Chris12345",
+			loc: { coordinates: [32.583520, 0.347296] },
 			bloodGroup: bloodgroup[5],
 			data: {
 				lastDonation: 1566453
@@ -167,18 +163,18 @@ describe("Blood Group API ", function () {
 
 		BloodGroup.create(bloodgroup, function (error, bloodgroups) {
 			assert.ifError(error);
-			console.log("The bloodgroups will be ", bloodgroups);
-			Donor.create(donors, function (error, donors) {
-				assert.ifError(error);
-				console.log("The donors will be ", donors);
-				done();
-			});
+			// console.log("The bloodgroups will be ", bloodgroups);
+			// Donor.create(donors, (error, donors)=> {
+			// 	assert.ifError(error);
+			// console.log("The donors will be ", donors);
+			done();
+			// });
 		});
 	});
 
 	it("Load the first User in the database ", function (done) {
 
-		var url = URL_ROOT + "/donor/search/50.9/50.9/10/10/AB+";
+		var url = URL_ROOT + "/donor/search/32.583520/0.347296/1/10/B+";
 		superagent.get(url, function (error, res) {
 			var results = "";
 			assert.ifError(error);

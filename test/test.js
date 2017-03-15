@@ -5,7 +5,8 @@
  /*eslint no-console: ["error", { allow: ["warn", "error", "log", "dir"] }] */
 
 
-let superagent, assert, status, express, wagner, URL_ROOT, server, Donor, BloodGroup, models, app;
+let superagent, assert, status, express, wagner, URL_ROOT,
+	server, Donor, BloodGroup, models, app, hashSalt;
 
 superagent = require("superagent");
 assert = require("assert");
@@ -14,10 +15,11 @@ express = require("express");
 wagner = require("wagner-core");
 
 URL_ROOT = "http://localhost:3000";
+hashSalt = "IHngate#bi*Tall";
 // var PRODUCT_ID = "000000000000000000000001";
 
 describe("Blood Group API ", ()=> {
-	before(()=> {
+	before(() => {
 		app = express();
 		require("./../models/models")(wagner);
 
@@ -38,11 +40,11 @@ describe("Blood Group API ", ()=> {
 
 	});
 
-	after(()=> {
+	after(() => {
 		server.close();
 	});
 
-	beforeEach((done)=> {
+	beforeEach((done) => {
 
 		BloodGroup.remove({}, (error) => {
 			assert.ifError(error);
@@ -54,7 +56,7 @@ describe("Blood Group API ", ()=> {
 
 	});
 
-	beforeEach((done)=> {
+	beforeEach((done) => {
 		let bloodgroup, donors;
 
 		bloodgroup = [
@@ -130,9 +132,9 @@ describe("Blood Group API ", ()=> {
 				lastName: "Chrispinus",
 				phone: "+256703326159",
 				email: "onyanchachrispinus@gmail.com",
-				location: {
-					geoLong: 50.00,
-					geoLat: 50.00
+				password: (hashSalt + "Chris123"),
+				loc: {
+					coordinates: [32.582520, 0.347596]
 				},
 				bloodGroup: bloodgroup[0],
 				data: {
@@ -143,9 +145,9 @@ describe("Blood Group API ", ()=> {
 				lastName: "OPut",
 				phone: "+256787453422",
 				email: "on@gmail.com",
-				location: {
-					geoLong: 35.00,
-					geoLat: 25.00
+				password: (hashSalt + "Chris1234"),
+				loc: {
+					coordinates: [32.682520, 0.547596]
 				},
 				bloodGroup: bloodgroup[4],
 				data: {
@@ -156,9 +158,9 @@ describe("Blood Group API ", ()=> {
 				lastName: "denis",
 				phone: "+256709815909",
 				email: "ts@gmail.com",
-				location: {
-					geoLong: 45.00,
-					geoLat: 60.00
+				password: (hashSalt + "Chris12345"),
+				loc: {
+					coordinates: [32.583520, 0.347296]
 				},
 				bloodGroup: bloodgroup[5],
 				data: {
@@ -168,28 +170,28 @@ describe("Blood Group API ", ()=> {
 		];
 
 
-
-		BloodGroup.create(bloodgroup, (error, bloodgroups)=> {
+		BloodGroup.create(bloodgroup, (error, bloodgroups) => {
 			assert.ifError(error);
 			console.log("The bloodgroups will be ", bloodgroups);
-			Donor.create(donors, (error, donors)=> {
+			Donor.create(donors, (error, donors) => {
 				assert.ifError(error);
 				console.log("The donors will be ", donors);
 				done();
+                // });
 			});
+
 		});
 
 	});
 
+	it("Load the first User in the database ", (done) => {
 
-	it("Load the first User in the database ", (done)=> {
-
-		var url = URL_ROOT + "/donor/search/50.9/50.9/10/10/AB+";
-		superagent.get(url, (error, res)=> {
+		var url = URL_ROOT + "/donor/search/32.583520/0.347296/1/10/A+";
+		superagent.get(url, (error, res) => {
 			var results = "";
 			assert.ifError(error);
 			assert.equal(res.status, status.OK);
-			assert.doesNotThrow(()=> {
+			assert.doesNotThrow(() => {
 				results = JSON.parse(res.text).donors;
 			});
 			assert.ok(results.length, 1);
@@ -197,6 +199,5 @@ describe("Blood Group API ", ()=> {
 			done();
 		});
 	});
-
 
 });
